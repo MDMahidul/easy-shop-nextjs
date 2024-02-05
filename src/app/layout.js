@@ -15,17 +15,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="dark" className="transition-all">
-      <body
-        className={classNames(
-          roboto.variable,
-          "container mx-auto px-2 font-roboto"
-        )}
-      >
+      <body className={classNames(roboto.variable, " font-roboto")}>
         <Providers>
           <div className="flex min-h-screen flex-col justify-between">
             <div>
               <Navbar />
-              <main>{children}</main>
+              <main className="container mx-auto">{children}</main>
             </div>
             <Footer />
           </div>

@@ -1,19 +1,20 @@
-'use client'
-import Link from 'next/link';
-import React, { useState } from 'react';
-import NavLink from './NavLink';
-import Image from 'next/image';
-import { afterLoginNavData, beforeLoginNavData } from '@/data/navData';
-import useTheme from '@/hooks/useTheme';
+"use client";
+import Link from "next/link";
+import React, { useState } from "react";
+import NavLink from "./NavLink";
+import Image from "next/image";
+import { afterLoginNavData, beforeLoginNavData } from "@/data/navData";
+import useTheme from "@/hooks/useTheme";
 
 const Navbar = () => {
-    const user = null;
-    const navData = user ? afterLoginNavData : beforeLoginNavData;
-    const [navToggle, setNavToggle] = useState(false);
-    const {theme,toggleTheme} = useTheme();
+  const user = null;
+  const navData = user ? afterLoginNavData : beforeLoginNavData;
+  const [navToggle, setNavToggle] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
-    return (
-      <nav className="navbar sticky top-0 z-10 bg-slate-200 shadow-lg dark:bg-slate-900 lg:pr-3">
+  return (
+    <nav className="navbar -px-10 sticky top-0 z-10 bg-slate-200 shadow-lg dark:bg-slate-900 lg:pr-3">
+      <div className="w-[97.5%] mx-auto">
         <div className="flex-1">
           <Link href="/" className="btn-ghost btn text-2xl normal-case">
             Easy Shop
@@ -31,7 +32,7 @@ const Navbar = () => {
                   onClick={() => setNavToggle(false)}
                   href={path}
                   activeClassName="text-blue-500"
-                  exact={path === '/'}
+                  exact={path === "/"}
                 >
                   {title}
                 </NavLink>
@@ -160,8 +161,9 @@ const Navbar = () => {
             <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
           </svg>
         </label>
-      </nav>
-    );
+      </div>
+    </nav>
+  );
 };
 
 export default Navbar;
