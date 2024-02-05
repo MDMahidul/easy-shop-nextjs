@@ -1,10 +1,15 @@
 'use client'
 
+import AuthProvider from "./AuthProvider";
 import ThemeProvider from "./ThemeProvider";
 
 /* common provider */
 const Providers = ({children}) => {
-    return <ThemeProvider>{children}</ThemeProvider>;
+    return (
+      <ThemeProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </ThemeProvider>
+    );
 };
 
 export default Providers;
