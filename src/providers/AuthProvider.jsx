@@ -17,10 +17,10 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const proFileUpdate =async (updateUser = {}) => {
+  const profileUpdate = async (updateUser = {}) => {
     setLoading(true);
     await updateProfile(auth.currentUser, updateUser);
-    setUser((prevUser)=>({...prevUser,...updateUser}))
+    setUser((prevUser) => ({ ...prevUser, ...updateUser }));
   };
 
   const googleLogin = () => {
@@ -49,7 +49,7 @@ const AuthProvider = ({ children }) => {
     loading,
     createUser,
     signIn,
-    proFileUpdate,
+    profileUpdate,
     googleLogin,
     logout,
   };

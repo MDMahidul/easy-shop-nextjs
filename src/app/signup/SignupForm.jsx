@@ -1,7 +1,9 @@
 "use client";
 import GoogleLogin from "@/components/GoogleLogin";
 import useAuth from "@/hooks/useAuth";
+import createJWT from "@/utils/createJWT";
 import Link from "next/link";
+import { useRouter,useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
@@ -15,7 +17,10 @@ const SignupForm = () => {
     setValue,
   } = useForm();
 
-  const { createUser, profileUpdate,googleLogin } = useAuth();
+  const { createUser, profileUpdate, googleLogin } = useAuth();
+  const search = useSearchParams();
+  const from = search.get("redirectUrl") || "/";
+  const { replace } = useRouter();
 
   const uploadImage = async (e) => {
     const formData = new FormData();
@@ -49,6 +54,9 @@ const SignupForm = () => {
         displayName: name,
         photoURL: photo,
       });
+      toast.dismiss(toastId);
+      toast.success("User signed in successfully");
+      replace(from);
     } catch (error) {
       toast.dismiss(toastId);
       toast.error(error.message || "User not signed in");
@@ -58,9 +66,11 @@ const SignupForm = () => {
  const handleGoogleLogin = async () => {
    const toastId = toast.loading("Loading...");
    try {
-     const user = await googleLogin();
+     const {user} = await googleLogin();
+     await createJWT({email:user.email})
      toast.dismiss(toastId);
      toast.success("User signed in successfully");
+     replace(from);
    } catch (error) {
      toast.dismiss(toastId);
      toast.error(error.message || "Something went wrong!!!");

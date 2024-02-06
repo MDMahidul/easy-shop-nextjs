@@ -1,7 +1,9 @@
 "use client";
 import GoogleLogin from "@/components/GoogleLogin";
 import useAuth from "@/hooks/useAuth";
+import createJWT from "@/utils/createJWT";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -14,33 +16,39 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm();
 
-  const {signIn,googleLogin} = useAuth();
+  const { signIn, googleLogin } = useAuth();
+  const search = useSearchParams();
+  const from = search.get("redirectUrl") || "/";
+  const {replace}=useRouter();
 
-  const onSubmit =async (data) => {
-    const {email,password} = data;
+  const onSubmit = async (data) => {
+    const { email, password } = data;
     const toastId = toast.loading("Loading...");
     try {
-        const user = await signIn(email,password);
-        toast.dismiss(toastId);
-        toast.success('User signed in successfully');
+      const user = await signIn(email, password);
+      await createJWT({ email });
+      toast.dismiss(toastId);
+      toast.success("User signed in successfully");
+      replace(from);
     } catch (error) {
-        toast.dismiss(toastId);
-        toast.error(error.message || "Something went wrong!!!");
+      toast.dismiss(toastId);
+      toast.error(error.message || "Something went wrong!!!");
     }
   };
 
-  const handleGoogleLogin=async()=>{
+  const handleGoogleLogin = async () => {
     const toastId = toast.loading("Loading...");
     try {
-        const user = await googleLogin();
-        toast.dismiss(toastId);
-        toast.success("User signed in successfully");
+      const {user} = await googleLogin();
+     await createJWT({ email: user.email });
+      toast.dismiss(toastId);
+      toast.success("User signed in successfully");
+      replace(from)
     } catch (error) {
-        toast.dismiss(toastId);
-        toast.error(error.message || "Something went wrong!!!");
+      toast.dismiss(toastId);
+      toast.error(error.message || "Something went wrong!!!");
     }
-
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="card-body">
